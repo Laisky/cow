@@ -383,9 +383,12 @@ func (p configParser) ParseTunnelAllowedPort(val string) {
 	arr := strings.Split(val, ",")
 	for _, s := range arr {
 		s = strings.TrimSpace(s)
-		if _, err := strconv.Atoi(s); err != nil {
-			Fatal("tunnel allowed ports", err)
+		if s != "*" {
+			if _, err := strconv.Atoi(s); err != nil {
+				Fatal("tunnel allowed ports", err)
+			}
 		}
+
 		config.TunnelAllowedPort[s] = true
 	}
 }
