@@ -435,6 +435,15 @@ func (s SinkWriter) Write(p []byte) (int, error) {
 	return len(p), nil
 }
 
+func portAllowed(port string) bool {
+	if _, ok := config.TunnelAllowedPort["*"]; ok {
+		return true
+	}
+
+	_, ok := config.TunnelAllowedPort[port]
+	return ok
+}
+
 func (c *clientConn) serve() {
 	var r Request
 	var rp Response
@@ -495,7 +504,7 @@ func (c *clientConn) serve() {
 			authed = true
 		}
 
-		if r.isConnect && !config.TunnelAllowedPort[r.URL.Port] {
+		if r.isConnect && !portAllowed(r.URL.Port) {
 			sendErrorPage(c, statusForbidden, "Forbidden tunnel port",
 				genErrMsg(&r, nil, "Please contact proxy admin."))
 			return
