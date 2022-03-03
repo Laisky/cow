@@ -5,7 +5,7 @@ Fork from: <https://github.com/cyfdecyf/cow>
 ## Install
 
 ```sh
-go install github.com/Laisky/cow
+go install github.com/Laisky/cow@master
 ```
 
 Download sample config file: <https://github.com/Laisky/cow/tree/2fb160830621168dcccb1f01b49ef6bee6ec8a77/doc/sample-config>
