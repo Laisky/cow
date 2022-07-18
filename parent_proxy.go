@@ -282,7 +282,7 @@ func (pp *latencyParentPool) updateLatency() {
 	// the value in cp.parent will not be updated.
 	var wg sync.WaitGroup
 	wg.Add(len(cp.parent))
-	for i, _ := range cp.parent {
+	for i := range cp.parent {
 		cp.parent[i].updateLatency(&wg)
 	}
 	wg.Wait()

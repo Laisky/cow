@@ -1,6 +1,6 @@
 module github.com/Laisky/cow
 
-go 1.17
+go 1.18
 
 require (
 	github.com/cyfdecyf/bufio v0.0.0-20130801052708-9601756e2a6b

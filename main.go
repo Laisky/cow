@@ -37,6 +37,14 @@ func main() {
 		os.Exit(0)
 	}
 
+	if !printSampleConfig(cmdLineConfig) {
+		return
+	}
+
+	if !printSystemdConfig(cmdLineConfig) {
+		return
+	}
+
 	parseConfig(cmdLineConfig.RcFile, cmdLineConfig)
 
 	initSelfListenAddr()
