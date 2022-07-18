@@ -1,11 +1,12 @@
+//go:build darwin || freebsd || linux || netbsd || openbsd
 // +build darwin freebsd linux netbsd openbsd
 
 package main
 
 import (
 	"net"
-	"syscall"
 	"strings"
+	"syscall"
 )
 
 func isErrConnReset(err error) bool {

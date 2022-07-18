@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"errors"
 	"flag"
 	"fmt"
@@ -74,8 +75,12 @@ type Config struct {
 	EstimateTimeout bool   // Whether to run estimateTimeout().
 	EstimateTarget  string // Timeout estimate target site.
 
+	SampleConfig bool
+	Systemd      string
+
 	// not config option
 	saveReqLine bool // for http and cow parent, should save request line from client
+
 }
 
 var config Config
@@ -120,7 +125,8 @@ func parseCmdLineConfig() *Config {
 	flag.StringVar(&c.LogFile, "logFile", "", "write output to file")
 	flag.BoolVar(&c.PrintVer, "version", false, "print version")
 	flag.BoolVar(&c.EstimateTimeout, "estimate", true, "enable/disable estimate timeout")
-
+	flag.BoolVar(&c.SampleConfig, "sample", false, "print sample config")
+	flag.StringVar(&c.Systemd, "systemd", "", "print systemd config, set your user name")
 	flag.Parse()
 
 	if c.RcFile == "" {
@@ -138,6 +144,30 @@ func parseCmdLineConfig() *Config {
 		cmdHasListenAddr = true // must come after parse
 	}
 	return &c
+}
+
+//go:embed doc/sample-config/rc-en
+var sampleConfig string
+
+func printSampleConfig(c *Config) bool {
+	if !c.SampleConfig {
+		return true
+	}
+
+	fmt.Println(sampleConfig)
+	return false
+}
+
+//go:embed doc/systemd.service
+var sampleSystemd string
+
+func printSystemdConfig(c *Config) bool {
+	if c.Systemd == "" {
+		return true
+	}
+
+	fmt.Println(strings.ReplaceAll(sampleSystemd, "laisky", c.Systemd))
+	return false
 }
 
 func parseBool(v, msg string) bool {

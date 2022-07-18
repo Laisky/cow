@@ -135,7 +135,7 @@ function FindProxyForURL(url, host) {
 	}
 
 	var buf bytes.Buffer
-	for k, _ := range topLevelDomain {
+	for k := range topLevelDomain {
 		buf.WriteString(fmt.Sprintf("\t\"%s\": true,\n", k))
 	}
 	pac.topLevelDomain = buf.String()[:buf.Len()-2] // remove the final comma
