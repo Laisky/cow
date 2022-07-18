@@ -76,7 +76,7 @@ type Config struct {
 	EstimateTarget  string // Timeout estimate target site.
 
 	SampleConfig bool
-	Systemd      string
+	Systemd      bool
 
 	// not config option
 	saveReqLine bool // for http and cow parent, should save request line from client
@@ -126,7 +126,7 @@ func parseCmdLineConfig() *Config {
 	flag.BoolVar(&c.PrintVer, "version", false, "print version")
 	flag.BoolVar(&c.EstimateTimeout, "estimate", true, "enable/disable estimate timeout")
 	flag.BoolVar(&c.SampleConfig, "sample", false, "print sample config")
-	flag.StringVar(&c.Systemd, "systemd", "", "print systemd config, set your user name")
+	flag.BoolVar(&c.Systemd, "systemd", false, "print systemd config, depends on $GOPATH, $HOME")
 	flag.Parse()
 
 	if c.RcFile == "" {
@@ -162,11 +162,17 @@ func printSampleConfig(c *Config) bool {
 var sampleSystemd string
 
 func printSystemdConfig(c *Config) bool {
-	if c.Systemd == "" {
+	if !c.Systemd {
 		return true
 	}
 
-	fmt.Println(strings.ReplaceAll(sampleSystemd, "laisky", c.Systemd))
+	gopath := os.Getenv("GOPATH")
+	home := os.Getenv("HOME")
+
+	sampleSystemd = strings.ReplaceAll(sampleSystemd, "$GOPATH", gopath)
+	sampleSystemd = strings.ReplaceAll(sampleSystemd, "$HOME", home)
+
+	fmt.Println(sampleSystemd)
 	return false
 }
 
