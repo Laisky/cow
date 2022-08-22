@@ -8,7 +8,7 @@ Type=simple
 Restart=always
 RestartSec=1
 User=root
-ExecStart=$GOPATH/bin/cow -rc $HOME/.cow/rc
+ExecStart=$HOME/go/bin/cow -rc $HOME/.cow/rc
 
 [Install]
 WantedBy=multi-user.target
