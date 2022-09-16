@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net"
 	"strings"
 	"sync"
@@ -149,16 +150,22 @@ func (hp *httpProxy) Serve(wg *sync.WaitGroup, quit <-chan struct{}) {
 	}()
 	ln, err := net.Listen("tcp", hp.addr)
 	if err != nil {
-		fmt.Println("listen http failed:", err)
+		log.Panicf("listen http failed: %+v", err)
 		return
 	}
+
 	var exit bool
 	go func() {
 		<-quit
 		exit = true
 		ln.Close()
 	}()
-	host, _, _ := net.SplitHostPort(hp.addr)
+
+	host, _, err := net.SplitHostPort(hp.addr)
+	if err != nil {
+		log.Panicf("split port %s: %+v", hp.addr, err)
+	}
+
 	var pacURL string
 	if host == "" || host == "0.0.0.0" {
 		pacURL = fmt.Sprintf("http://<hostip>:%s/pac", hp.port)
