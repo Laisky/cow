@@ -20,6 +20,7 @@ func sigHandler() {
 		if sig == syscall.SIGUSR1 {
 			relaunch = true
 		}
+
 		close(quit)
 		break
 	}

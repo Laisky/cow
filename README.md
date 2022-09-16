@@ -10,7 +10,7 @@ Fork from: <https://github.com/cyfdecyf/cow>
 ## Install
 
 ```sh
-go install github.com/Laisky/cow@master
+go install github.com/Laisky/cow@latest
 ```
 
 Show Sample config:

@@ -1,11 +1,9 @@
 package main
 
 import (
-	// "flag"
 	"os"
 	"os/exec"
 	"runtime"
-	// "runtime/pprof"
 	"sync"
 	"syscall"
 )
