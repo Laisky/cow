@@ -2,6 +2,11 @@
 
 Fork from: <https://github.com/cyfdecyf/cow>
 
+## New Features
+
+* default allow all ports
+* `tunnelAllowedPort` support `*` to allow all ports.
+
 ## Install
 
 ```sh
@@ -30,8 +35,3 @@ cow -systemd > /etc/systemd/system/cow.service
 
 sudo systemctl enable --now cow
 ```
-
-
-## New Features
-
-`tunnelAllowedPort` support `*` to allow all ports.
