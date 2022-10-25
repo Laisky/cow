@@ -9,6 +9,16 @@ Fork from: <https://github.com/cyfdecyf/cow>
 
 ## Install
 
+### Docker
+
+```sh
+docker run -p 7777:7777 ppcelery/cow:latest
+```
+
+you can mount your own config rc to `/etc/cow/rc`
+
+### Manual
+
 ```sh
 go install github.com/Laisky/cow@latest
 ```
@@ -17,14 +27,12 @@ Show Sample config:
 
 (save your config file at `$HOME/.cow/rc`)
 
-
 ```sh
 # write default config
 cow -sample > $HOME/.cow/rc
 ```
 
 Add systemd service:
-
 
 ```sh
 # check

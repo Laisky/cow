@@ -27,7 +27,7 @@
 #
 #       listen = http://127.0.0.1:7777 1.2.3.4:5678
 #
-listen = http://127.0.0.1:7777
+listen = http://0.0.0.0:7777
 
 # Log file path, defaults to stdout
 #logFile =
