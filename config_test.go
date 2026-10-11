@@ -25,6 +25,11 @@ func TestParseListen(t *testing.T) {
 
 func TestTunnelAllowedPort(t *testing.T) {
 	initConfig("")
+	if !config.TunnelAllowedPort["*"] {
+		t.Fatal("default policy must allow the wildcard tunnel port")
+	}
+	// Exercise explicit restricted-port parsing independently of the wildcard default.
+	config.TunnelAllowedPort = map[string]bool{"80": true, "443": true}
 	parser := configParser{}
 	parser.ParseTunnelAllowedPort("1, 2, 3, 4, 5")
 	parser.ParseTunnelAllowedPort("6")
