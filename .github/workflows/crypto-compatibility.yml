@@ -1,0 +1,58 @@
+name: Crypto dependency compatibility
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  compatibility:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ['1.25.8', '1.27.2']
+        graph: [original, candidate]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          path: candidate
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        if: matrix.graph == 'original'
+        with:
+          ref: 21aeaeb7e8ea2d612582083a52154f0abf81d1b2
+          path: original
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version: ${{ matrix.go }}
+          cache: false
+      - name: Qualify immutable original and candidate graphs
+        env:
+          GRAPH: ${{ matrix.graph }}
+          GOTOOLCHAIN: local
+        shell: bash
+        run: |
+          set -euo pipefail
+          work=candidate
+          if [ "$GRAPH" = original ]; then
+            work=original
+            cp candidate/crypto_compatibility_test.go original/
+            mkdir -p original/testdata
+            cp candidate/testdata/crypto-wire.json original/testdata/
+          fi
+          cd "$work"
+          sha256sum go.mod go.sum > "$RUNNER_TEMP/manifests.sha256"
+          go mod download
+          go mod verify
+          go test -race -mod=readonly -count=1 -timeout=3m ./...
+          go test -race -mod=readonly -count=1 -timeout=3m golang.org/x/crypto/blowfish golang.org/x/crypto/cast5 golang.org/x/crypto/salsa20/salsa
+          go vet -mod=readonly ./...
+          go build -mod=readonly -o "$RUNNER_TEMP/cow" .
+          CGO_ENABLED=0 GOARCH=arm64 go build -mod=readonly -o "$RUNNER_TEMP/cow-arm64" .
+          sha256sum --check "$RUNNER_TEMP/manifests.sha256"

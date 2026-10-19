@@ -1,6 +1,6 @@
 module github.com/Laisky/cow
 
-go 1.17
+go 1.25.0
 
 require (
 	github.com/cyfdecyf/bufio v0.0.0-20130801052708-9601756e2a6b
@@ -11,6 +11,6 @@ require (
 
 require (
 	github.com/aead/chacha20 v0.0.0-20180709150244-8b13a72661da // indirect
-	golang.org/x/crypto v0.17.0 // indirect
-	golang.org/x/sys v0.15.0 // indirect
+	golang.org/x/crypto v0.52.0 // indirect
+	golang.org/x/sys v0.45.0 // indirect
 )
